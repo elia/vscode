@@ -820,7 +820,7 @@ export class JoinLinesAction extends EditorAction {
 				let firstNonWhitespaceIdx = model.getLineFirstNonWhitespaceColumn(i);
 
 				if (firstNonWhitespaceIdx >= 1) {
-					let insertSpace = true;
+					let insertSpace = editor.getOption(EditorOption.joinLinesWithSpace);
 					if (trimmedLinesContent === '') {
 						insertSpace = false;
 					}

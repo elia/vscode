@@ -370,6 +370,55 @@ suite('Editor Contrib - Line Operations', () => {
 				});
 		});
 
+		test('should join lines and not insert space if disabled', function () {
+			withTestCodeEditor(
+				[
+					'hello',
+					'world',
+					'hello ',
+					'world',
+					'hello		',
+					'	world',
+					'hello   ',
+					'	world',
+					'',
+					'',
+					'hello world'
+				], {}, (editor) => {
+					let model = editor.getModel()!;
+					let joinLinesAction = new JoinLinesAction();
+
+					editor.updateOptions({
+						joinLinesWithSpace: false
+					})
+
+					editor.setSelection(new Selection(1, 2, 1, 2));
+					executeAction(joinLinesAction, editor);
+					assert.equal(model.getLineContent(1), 'helloworld');
+					assertSelection(editor, new Selection(1, 6, 1, 6));
+
+					editor.setSelection(new Selection(2, 2, 2, 2));
+					executeAction(joinLinesAction, editor);
+					assert.equal(model.getLineContent(2), 'hello world');
+					assertSelection(editor, new Selection(2, 7, 2, 7));
+
+					editor.setSelection(new Selection(3, 2, 3, 2));
+					executeAction(joinLinesAction, editor);
+					assert.equal(model.getLineContent(3), 'hello		world');
+					assertSelection(editor, new Selection(3, 7, 3, 7));
+
+					editor.setSelection(new Selection(4, 2, 5, 3));
+					executeAction(joinLinesAction, editor);
+					assert.equal(model.getLineContent(4), 'hello   world');
+					assertSelection(editor, new Selection(4, 2, 4, 8));
+
+					editor.setSelection(new Selection(5, 1, 7, 3));
+					executeAction(joinLinesAction, editor);
+					assert.equal(model.getLineContent(5), 'hello world');
+					assertSelection(editor, new Selection(5, 1, 5, 3));
+				});
+		});
+
 		test('#50471 Join lines at the end of document', function () {
 			withTestCodeEditor(
 				[

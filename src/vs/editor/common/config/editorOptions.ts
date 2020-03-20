@@ -584,6 +584,11 @@ export interface IEditorOptions {
 	 * Defaults to false.
 	 */
 	definitionLinkOpensInPeek?: boolean;
+	/**
+	 * Controls whether the definition link opens element in the peek widget.
+	 * Defaults to false.
+	 */
+	joinLinesWithSpace?: boolean;
 }
 
 export interface IEditorConstructionOptions extends IEditorOptions {
@@ -3376,6 +3381,7 @@ export const enum EditorOption {
 	highlightActiveIndentGuide,
 	hover,
 	inDiffEditor,
+	joinLinesWithSpace,
 	letterSpacing,
 	lightbulb,
 	lineDecorationsWidth,
@@ -4079,7 +4085,10 @@ export const EditorOptions = {
 	pixelRatio: register(new EditorPixelRatio()),
 	tabFocusMode: register(new EditorTabFocusMode()),
 	layoutInfo: register(new EditorLayoutInfoComputer()),
-	wrappingInfo: register(new EditorWrappingInfoComputer())
+	wrappingInfo: register(new EditorWrappingInfoComputer()),
+	joinLinesWithSpace: register(new EditorBooleanOption(
+		EditorOption.joinLinesWithSpace, 'joinLinesWithSpace', true,
+	)),
 };
 
 type EditorOptionsType = typeof EditorOptions;
